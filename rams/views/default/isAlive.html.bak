@@ -1,0 +1,7 @@
+{{extend 'layout.html'}}
+
+<div>
+    {{=unit_id}} <br/>
+    {{=date}} <br/>
+    {{=time}} <br/>
+</div>

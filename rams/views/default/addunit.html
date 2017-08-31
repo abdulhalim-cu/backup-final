@@ -1,0 +1,120 @@
+{{extend 'layout.html'}}
+
+<div id="page-title">
+    <h2>Add Unit</h2>
+</div>
+<div class="panel">
+    <div class="panel-body">
+    <div>
+        <button id="finger" class="btn btn-primary" style="width:100px;" name="fingerpring">Finger Print</button>
+        <button id="rfid" class="btn btn-primary" style="width:100px;" name="rfid">RFID</button>
+        <button id="mobile" class="btn btn-primary" style="width:100px;" name="mobile">Mobile</button>
+    </div>
+    <div class="formhere"></div>
+    <div class="row"  style="display:none;" id="finger_form">
+        <div class="col-md-12 col-sm-12">
+            <form class="form-horizontal bordered-row" method="post" action="{{=URL('default', 'registerUnit')}}" role="form">
+                <input type="hidden" class="form-control" name="unit" value="fingerprint"/>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label" for="DeviceId">DEVICE ID</label>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control" id="DeviceId" name="deviceid" placeholder="Enter Device ID" required="required" data-error="Valid Device Id is required." /></div>
+              </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label" for="DeviceName">DEVICE NAME</label>
+                <div class="col-sm-6">
+                  <input type="text" class="form-control" name="devicename" id="DeviceName" placeholder="Enter Device Name" required="required" data-error="Device name is required." /></div>
+              </div>
+                  <input type="hidden" class="form-control" name="devicetype" value="fingerprint" id="DeviceType"/>
+            <div class="form-group">
+                <label class="col-sm-3 control-label" for="Model">MODEL</label>
+                <div class="col-sm-6">
+                  <input type="text" class="form-control" name="model" id="Model" placeholder="Enter Model No." required="required" data-error="Model No. Is required." /></div>
+              </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label" for="Vendor">VENDOR</label>
+                <div class="col-sm-6">
+                  <input type="text" class="form-control" name="vendor" id="Vendor" placeholder="Enter Vendor" required="required" data-error="Vendor is required." /></div>
+              </div>
+            <div class="col-md-9 col-sm-9">
+              <input type="submit" name="submit" id="submit" value="ADD DEVICE" class="btn btn-info pull-right" />
+            </div>
+            </form>
+        </div>
+    </div>
+    <div class="row" style="display:none;" id="rfid_form">
+        <div class="col-md-12 col-sm-12">
+             <form class="form-horizontal bordered-row" id="contact-form" method="post" action="{{=URL('default', 'registerUnit')}}" role="form">
+                 <input type="hidden" class="form-control" name="unit" value="rfid"/>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label" for="DeviceId">DEVICE ID</label>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control" id="DeviceId" name="deviceid" placeholder="Enter Device ID" required="required" data-error="Valid Device Id is required." /></div>
+              </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label" for="DeviceName">DEVICE NAME</label>
+                <div class="col-sm-6">
+                  <input type="text" class="form-control" name="devicename" id="DeviceName" placeholder="Enter Device Name" required="required" data-error="Device name is required." /></div>
+              </div>
+                 <input type="hidden" class="form-control" name="devicetype" id="DeviceType" value="rfid"/>
+            <div class="form-group">
+                <label class="col-sm-3 control-label" for="Model">MODEL</label>
+                <div class="col-sm-6">
+                  <input type="text" class="form-control" name="model" id="Model" placeholder="Enter Model No." required="required" data-error="Model No. Is required." /></div>
+              </div>
+            <div class="col-md-9 col-sm-9">
+              <input type="submit" name="submit" id="submit" value="ADD DEVICE" class="btn btn-info pull-right" />
+            </div>
+            </form>
+        </div>
+    </div>
+    <div class="row" style="display:none;" id="mobile_form">
+        <div class="col-md-12 col-sm-12">
+            <form class="form-horizontal bordered-row" id="contact-form" method="post" action="{{=URL('default', 'registerUnit')}}" role="form">
+                <input type="hidden" class="form-control" name="unit" value="mobile"/>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label" for="DeviceName">DEVICE NAME</label>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" name="devicename" id="DeviceName" placeholder="Enter Device Name" required="required" data-error="Device name is required." />
+                    </div>
+                </div>
+                        <input type="hidden" class="form-control" name="devicetype" id="DeviceType" value="mobile"/>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label" for="Model">Latitude</label>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" name="latitude" id="Model" placeholder="Enter Latitude" required="required" data-error="Location latitude Is required." />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label" for="Model">Longitude</label>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" name="longitude" id="Model" placeholder="Enter Longitude" required="required" data-error="Location Longitude Is required." />
+                    </div>
+                </div>
+                <div class="col-md-9 col-sm-9">
+                    <input type="submit" name="submit" id="submit" value="ADD DEVICE" class="btn btn-info pull-right" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+
+
+<script>
+$('#finger').on('click',function(){
+    if($('#formhere').css('display')!='none'){
+        $('#finger_form').show().siblings('div').hide();
+    }
+});
+$('#rfid').on('click',function(){
+    if($('#formhere').css('display')!='none'){
+        $('#rfid_form').show().siblings('div').hide();
+    }
+});
+    $('#mobile').on('click',function(){
+    if($('#formhere').css('display')!='none'){
+        $('#mobile_form').show().siblings('div').hide();
+    }
+});
+</script>

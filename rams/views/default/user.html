@@ -1,0 +1,451 @@
+{{extend 'layout_user.html'}}
+{{if request.args(0) == 'login':}}
+<div class="center-vertical">
+    <div class="center-content row">
+        <div class="col-md-3 center-margin">
+            {{=form.custom.begin}}
+            <form method="post" action="">
+                <div class="content-box wow bounceInDown modal-content animated" style="visibility: visible; animation-name: bounceInDown;">
+                    <h3 class="content-box-header content-box-header-alt bg-default">
+                        <span class="icon-separator">
+                            <i class="glyph-icon icon-cog"></i>
+                        </span>
+                        <span class="header-wrapper">
+                            Members area
+                            <small>Login to your account.</small>
+                        </span>
+                        <span class="header-buttons">
+                            <a href="{{=URL('default','user/register')}}" class="btn btn-sm btn-primary" title="">Sign Up</a>
+                        </span>
+                    </h3>
+                    <div class="content-box-wrapper">
+                        <div class="form-group">
+                            <div class="input-group">
+                                {{form.custom.widget.username["_placeholder"] = "User Name"}}
+                                {{form.custom.widget.username["_required"] = "required"}}
+                                {{=form.custom.widget.username}}
+                                <span class="input-group-addon bg-blue">
+                                    <i class="glyph-icon fa-user"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                {{form.custom.widget.password["_placeholder"] = "Password"}}
+                                {{form.custom.widget.password["_required"] = "required"}}
+                                {{=form.custom.widget.password}}
+                                <span class="input-group-addon bg-blue">
+                                    <i class="glyph-icon icon-unlock-alt"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <a href="{{=URL('default','user/request_reset_password')}}" title="Recover password">Forgot Your Password?</a>
+                        </div>
+                        <input type="submit" class="btn btn-success btn-block" value="Sign in"/>
+                    </div>
+                </div>
+            {{=form.custom.end}}
+        </div>
+    </div>
+</div>
+{{elif request.args(0) == 'request_reset_password':}}
+<div class="center-vertical">
+    <div class="center-content row">
+        <div class="col-md-3 center-margin">
+            {{=form.custom.begin}}
+            <form method="post" action="">
+                <div class="content-box wow bounceInDown modal-content animated" style="visibility: visible; animation-name: bounceInDown;">
+                    <h3 class="content-box-header content-box-header-alt bg-default">
+                        <span class="icon-separator">
+                            <i class="glyph-icon icon-cog"></i>
+                        </span>
+                        <span class="header-wrapper">
+                            Members area
+                            <small>Reset your password.</small>
+                        </span>
+                        <span class="header-buttons">
+                            <a href="{{=URL('default','user/login')}}" class="btn btn-sm btn-primary" title="">Sign In</a>
+                        </span>
+                    </h3>
+                    <div class="content-box-wrapper">
+                        <div class="form-group">
+                            <div class="input-group">
+                                {{form.custom.widget.username["_placeholder"] = "User Name"}}
+                                {{form.custom.widget.username["_required"] = "required"}}
+                                {{=form.custom.widget.username}}
+                                <span class="input-group-addon bg-blue">
+                                    <i class="glyph-icon fa-user"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <input type='submit' class="btn btn-success btn-block" value='Reset Password'/>
+                    </div>
+                </div>
+            {{=form.custom.end}}
+        </div>
+    </div>
+</div>
+{{elif request.args(0) == 'register':}}
+<div class="center-vertical">
+    <div class="center-content row">
+        <div class="col-md-9 center-margin">
+            {{=form.custom.begin}}
+            <form method="post" action="">
+                <div class="content-box wow bounceInDown modal-content animated" style="visibility: visible; animation-name: bounceInDown;">
+                    <h3 class="content-box-header content-box-header-alt bg-default">
+                        <span class="icon-separator">
+                            <i class="glyph-icon icon-cog"></i>
+                        </span>
+                        <span class="header-wrapper">
+                            Members area
+                            <small>Register as new user.</small>
+                        </span>
+                        <span class="header-buttons">
+                            <a href="{{=URL('default','user/login')}}" class="btn btn-sm btn-primary" title="">Sign In</a>
+                        </span>
+                    </h3>
+                    <div class="content-box-wrapper">
+                        <div class='col-md-6'>
+                        <div class="form-group">
+                            <div class="input-group">
+                                {{form.custom.widget.first_name["_placeholder"] = "First Name"}}
+                                {{form.custom.widget.first_name["_required"] = "required"}}
+                                {{=form.custom.widget.first_name}}
+                                <span class="input-group-addon bg-blue">
+                                    <i class="glyph-icon fa-user"></i>
+                                </span>
+                            </div>
+                        </div>
+                        </div>
+                        <div class='col-md-6'>
+                        <div class="form-group">
+                            <div class="input-group">
+                                {{form.custom.widget.last_name["_placeholder"] = "Last Name"}}
+                                {{form.custom.widget.last_name["_required"] = "required"}}
+                                {{=form.custom.widget.last_name}}
+                                <span class="input-group-addon bg-blue">
+                                    <i class="glyph-icon fa-user"></i>
+                                </span>
+                            </div>
+                        </div>
+                        </div>
+                        <div class='col-md-6'>
+                        <div class="form-group">
+                            <div class="input-group">
+                                {{form.custom.widget.email["_placeholder"] = "Email"}}
+                                {{form.custom.widget.email["_required"] = "required"}}
+                                {{form.custom.widget.email["_type"] = "email"}}
+                                {{=form.custom.widget.email}}
+                                <span class="input-group-addon bg-blue">
+                                    <i class="glyph-icon fa-envelope-o"></i>
+                                </span>
+                            </div>
+                        </div>
+                        </div>
+                        <div class='col-md-6'>
+                        <div class="form-group">
+                            <div class="input-group">
+                                {{form.custom.widget.username["_placeholder"] = "User Name"}}
+                                {{form.custom.widget.username["_required"] = "required"}}
+                                {{=form.custom.widget.username}}
+                                <span class="input-group-addon bg-blue">
+                                    <i class="glyph-icon fa-envelope-o"></i>
+                                </span>
+                            </div>
+                        </div>
+                        </div>
+                        <div class='col-md-6'>
+                        <div class="form-group">
+                            <div class="input-group">
+                                {{form.custom.widget.password["_placeholder"] = "Password"}}
+                                {{form.custom.widget.password["_required"] = "required"}}
+                                {{=form.custom.widget.password}}
+                                <span class="input-group-addon bg-blue">
+                                    <i class="glyph-icon fa-unlock-alt"></i>
+                                </span>
+                            </div>
+                        </div>
+                        </div>
+                        <div class='col-md-6'>
+                        <div class="form-group">
+                            <div class="input-group">
+                                {{form.custom.widget.password_two["_placeholder"] = "Confirm password"}}
+                                {{form.custom.widget.password_two["_required"] = "required"}}
+                                {{=form.custom.widget.password_two}}
+                                <span class="input-group-addon bg-blue">
+                                    <i class="glyph-icon fa-unlock-alt"></i>
+                                </span>
+                            </div>
+                        </div>
+                        </div>
+                        <div class='col-md-6'>
+                        <div class="form-group">
+                            <div class="input-group">
+                                {{form.custom.widget.client_id["_placeholder"] = "Client ID"}}
+                                {{form.custom.widget.client_id["_required"] = "required"}}
+                                {{=form.custom.widget.client_id}}
+                                <span class="input-group-addon bg-blue">
+                                    <i class="glyph-icon fa-black-tie"></i>
+                                </span>
+                            </div>
+                        </div>
+                        </div>
+                        <div class='col-md-6'>
+                        <div class="form-group">
+                            <div class="input-group">
+                                {{form.custom.widget.institution_name["_placeholder"] = "Institution Name"}}
+                                {{=form.custom.widget.institution_name}}
+                                <span class="input-group-addon bg-blue">
+                                    <i class="glyph-icon fa-building-o"></i>
+                                </span>
+                            </div>
+                        </div>
+                        </div>
+                        <div class='col-md-6'>
+                        <div class="form-group">
+                            <div class="input-group">
+                                {{form.custom.widget.phone["_placeholder"] = "Phone"}}
+                                {{=form.custom.widget.phone}}
+                                <span class="input-group-addon bg-blue">
+                                    <i class="glyph-icon fa-phone"></i>
+                                </span>
+                            </div>
+                        </div>
+                        </div>
+                        <div class='col-md-6'>
+                        <div class="form-group">
+                            <div class="input-group">
+                                {{form.custom.widget.city["_placeholder"] = "City"}}
+                                {{=form.custom.widget.city}}
+                                <span class="input-group-addon bg-blue">
+                                    <i class="glyph-icon fa-map-o"></i>
+                                </span>
+                            </div>
+                        </div>
+                        </div>
+                        <div class='col-md-12'>
+                        <div class="form-group">
+                            <div class="input-group">
+                                {{form.custom.widget.address["_placeholder"] = "Address"}}
+                                {{=form.custom.widget.address}}
+                                <span class="input-group-addon bg-blue">
+                                    <i class="glyph-icon fa-home"></i>
+                                </span>
+                            </div>
+                        </div>
+                        </div>
+                        <input type='submit' class="btn btn-success btn-block" value='Sign Up'/>
+                    </div>
+                </div>
+            {{=form.custom.end}}
+        </div>
+    </div>
+</div>
+{{elif request.args(0) == 'profile':}}
+<div class="center-vertical">
+    <div class="center-content row">
+        <div class="col-md-9 center-margin">
+            {{=form.custom.begin}}
+            <form method="post" action="">
+                <div class="content-box wow bounceInDown modal-content animated" style="visibility: visible; animation-name: bounceInDown;">
+                    <h3 class="content-box-header content-box-header-alt bg-default">
+                        <span class="icon-separator">
+                            <i class="glyph-icon icon-cog"></i>
+                        </span>
+                        <span class="header-wrapper">
+                            Members area
+                            <small>Edit your profile.</small>
+                        </span>
+                        <span class="header-buttons">
+                            <a href="{{=URL('default','index')}}" class="btn btn-sm btn-primary" title="">Home</a>
+                        </span>
+                    </h3>
+                    <div class="content-box-wrapper">
+                        <div class='col-md-6'>
+                        <div class="form-group">
+                            <div class="input-group">
+                                {{form.custom.widget.first_name["_placeholder"] = "First Name"}}
+                                {{form.custom.widget.first_name["_required"] = "required"}}
+                                {{=form.custom.widget.first_name}}
+                            </div>
+                        </div>
+                        </div>
+                        <div class='col-md-6'>
+                        <div class="form-group">
+                            <div class="input-group">
+                                {{form.custom.widget.last_name["_placeholder"] = "Last Name"}}
+                                {{form.custom.widget.last_name["_required"] = "required"}}
+                                {{=form.custom.widget.last_name}}
+                            </div>
+                        </div>
+                        </div>
+                        <div class='col-md-6'>
+                        <div class="form-group">
+                            <div class="input-group">
+                                {{form.custom.widget.email["_placeholder"] = "Email"}}
+                                {{form.custom.widget.email["_required"] = "required"}}
+                                {{form.custom.widget.email["_type"] = "email"}}
+                                {{=form.custom.widget.email}}
+                            </div>
+                        </div>
+                        </div>
+                        <div class='col-md-6'>
+                        <div class="form-group">
+                            <div class="input-group">
+                                {{form.custom.widget.username["_placeholder"] = "User Name"}}
+                                {{form.custom.widget.username["_required"] = "required"}}
+                                {{=form.custom.widget.username}}
+                            </div>
+                        </div>
+                        </div>
+                        <div class='col-md-6'>
+                        <div class="form-group">
+                            <div class="input-group">
+                                {{form.custom.widget.client_id["_placeholder"] = "Client ID"}}
+                                {{form.custom.widget.client_id["_required"] = "required"}}
+                                {{=form.custom.widget.client_id}}
+                            </div>
+                        </div>
+                        </div>
+                        <div class='col-md-6'>
+                        <div class="form-group">
+                            <div class="input-group">
+                                {{form.custom.widget.institution_name["_placeholder"] = "Institution Name"}}
+                                {{=form.custom.widget.institution_name}}
+                            </div>
+                        </div>
+                        </div>
+                        <div class='col-md-6'>
+                        <div class="form-group">
+                            <div class="input-group">
+                                {{form.custom.widget.phone["_placeholder"] = "Phone"}}
+                                {{=form.custom.widget.phone}}
+                            </div>
+                        </div>
+                        </div>
+                        <div class='col-md-6'>
+                        <div class="form-group">
+                            <div class="input-group">
+                                {{form.custom.widget.city["_placeholder"] = "City"}}
+                                {{=form.custom.widget.city}}
+                            </div>
+                        </div>
+                        </div>
+                        <div class='col-md-12'>
+                        <div class="form-group">
+                            <div class="input-group">
+                                {{form.custom.widget.address["_placeholder"] = "Address"}}
+                                {{=form.custom.widget.address}}
+                            </div>
+                        </div>
+                        </div>
+                        <input type='submit' class="btn btn-success btn-block" value='Update'/>
+                    </div>
+                </div>
+            {{=form.custom.end}}
+        </div>
+    </div>
+</div>
+{{elif request.args(0) == 'change_password':}}
+<div class="center-vertical">
+    <div class="center-content row">
+        <div class="col-md-5 center-margin">
+            {{=form.custom.begin}}
+            <form method="post" action="">
+                <div class="content-box wow bounceInDown modal-content animated" style="visibility: visible; animation-name: bounceInDown;">
+                    <h3 class="content-box-header content-box-header-alt bg-default">
+                        <span class="icon-separator">
+                            <i class="glyph-icon icon-cog"></i>
+                        </span>
+                        <span class="header-wrapper">
+                            Members area
+                            <small>Change your password.</small>
+                        </span>
+                        <span class="header-buttons">
+                            <a href="{{=URL('default','index')}}" class="btn btn-sm btn-primary" title="">Home</a>
+                        </span>
+                    </h3>
+                    <div class="content-box-wrapper">
+                        <div class='col-md-12'>
+                        <div class="form-group">
+                            <div class="input-group">
+                                {{form.custom.widget.old_password["_placeholder"] = "Old Password"}}
+                                {{form.custom.widget.old_password["_required"] = "required"}}
+                                {{=form.custom.widget.old_password}}
+                            </div>
+                        </div>
+                        </div>
+                        <div class='col-md-12'>
+                        <div class="form-group">
+                            <div class="input-group">
+                                {{form.custom.widget.new_password["_placeholder"] = "New Password"}}
+                                {{form.custom.widget.new_password["_required"] = "required"}}
+                                {{=form.custom.widget.new_password}}
+                            </div>
+                        </div>
+                        </div>
+                        <div class='col-md-12'>
+                        <div class="form-group">
+                            <div class="input-group">
+                                {{form.custom.widget.new_password2["_placeholder"] = "Confirm Password"}}
+                                {{form.custom.widget.new_password2["_required"] = "required"}}
+                                {{=form.custom.widget.new_password2}}
+                            </div>
+                        </div>
+                        </div>
+                        <input type='submit' class="btn btn-success btn-block" value='Update'/>
+                    </div>
+                </div>
+            {{=form.custom.end}}
+        </div>
+    </div>
+</div>
+{{elif request.args(0) == 'retrieve_password':}}
+    {{=form}}
+{{elif request.args(0) == 'reset_password':}}
+<div class="center-vertical">
+    <div class="center-content row">
+        <div class="col-md-5 center-margin">
+            {{=form.custom.begin}}
+            <form method="post" action="">
+                <div class="content-box wow bounceInDown modal-content animated" style="visibility: visible; animation-name: bounceInDown;">
+                    <h3 class="content-box-header content-box-header-alt bg-default">
+                        <span class="icon-separator">
+                            <i class="glyph-icon icon-cog"></i>
+                        </span>
+                        <span class="header-wrapper">
+                            Members area
+                            <small>Reset your password.</small>
+                        </span>
+                        <span class="header-buttons">
+                            <a href="{{=URL('default','user/login')}}" class="btn btn-sm btn-primary" title="">Sign In</a>
+                        </span>
+                    </h3>
+                    <div class="content-box-wrapper">
+                        <div class='col-md-12'>
+                        <div class="form-group">
+                            <div class="input-group">
+                                {{form.custom.widget.new_password["_placeholder"] = "New Password"}}
+                                {{form.custom.widget.new_password["_required"] = "required"}}
+                                {{=form.custom.widget.new_password}}
+                            </div>
+                        </div>
+                        </div>
+                        <div class='col-md-12'>
+                        <div class="form-group">
+                            <div class="input-group">
+                                {{form.custom.widget.new_password2["_placeholder"] = "Confirm Password"}}
+                                {{form.custom.widget.new_password2["_required"] = "required"}}
+                                {{=form.custom.widget.new_password2}}
+                            </div>
+                        </div>
+                        </div>
+                        <input type='submit' class="btn btn-success btn-block" value='Update'/>
+                    </div>
+                </div>
+            {{=form.custom.end}}
+        </div>
+    </div>
+</div>
+{{pass}}

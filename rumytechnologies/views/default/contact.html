@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!<![endif]-->
+<html lang="en" class="no-js">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Contact Us - STELLAR</title>
+         <link rel="apple-touch-icon" sizes="57x57" href="{{=URL('static','favicon/apple-icon-57x57.png')}}">
+        <link rel="apple-touch-icon" sizes="60x60" href="{{=URL('static','favicon/apple-icon-60x60.png')}}">
+        <link rel="apple-touch-icon" sizes="72x72" href="{{=URL('static','favicon/apple-icon-72x72.png')}}">
+        <link rel="apple-touch-icon" sizes="76x76" href="{{=URL('static','favicon/apple-icon-76x76.png')}}">
+        <link rel="apple-touch-icon" sizes="114x114" href="{{=URL('static','favicon/apple-icon-114x114.png')}}">
+        <link rel="apple-touch-icon" sizes="120x120" href="{{=URL('static','favicon/apple-icon-120x120.png')}}">
+        <link rel="apple-touch-icon" sizes="144x144" href="{{=URL('static','favicon/apple-icon-144x144.png')}}">
+        <link rel="apple-touch-icon" sizes="152x152" href="{{=URL('static','favicon/apple-icon-152x152.png')}}">
+        <link rel="apple-touch-icon" sizes="180x180" href="{{=URL('static','favicon/apple-icon-180x180.png')}}">
+        <link rel="icon" type="image/png" sizes="192x192"  href="{{=URL('static','favicon/android-icon-192x192.png')}}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{{=URL('static','favicon/favicon-32x32.png')}}">
+        <link rel="icon" type="image/png" sizes="96x96" href="{{=URL('static','favicon/favicon-96x96.png')}}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{{=URL('static','favicon/favicon-16x16.png')}}">
+        <link rel="manifest" href="{{=URL('static','favicon/manifest.json')}}">
+        <meta name="msapplication-TileColor" content="#d04451">
+        <meta name="msapplication-TileImage" content="{{=URL('static','favicon/ms-icon-144x144.png')}}">
+        <meta name="theme-color" content="#d04451">
+        <script src="{{=URL('static','js/modernizr.custom.js')}}"></script>
+		<link href="{{=URL('static','css/bootstrap.min.css')}}" rel="stylesheet" />
+		<link href="{{=URL('static','css/animate.css')}}" rel="stylesheet" />
+        <link href="{{=URL('static','css/font-awesome.css')}}" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css?family=Fjalla+One|Open+Sans:400,700|Yanone+Kaffeesatz:400,700" rel="stylesheet" />
+		<link href="{{=URL('static','css/styles.css')}}" rel="stylesheet" />
+        
+        {{include 'web2py_ajax.html'}}
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+		<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+	</head>
+	<body class="contact">
+		<!--[if lt IE 7]>
+		<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+		<![endif]-->
+		<!-- open/close -->
+        {{if response.flash:}}
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">{{=response.flash or ''}}</h4>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default btn-danger" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+    {{pass}}
+		<header>
+			<section class="rumy">
+				<div class="texture-overlay"></div>
+				<div class="container">
+					<div class="row nav-wrapper">
+						<div class="col-md-6 col-sm-6 col-xs-6 text-left">
+							<a href="{{=URL('default','index')}}"><img src="{{=URL('static','images/logo-white.png')}}" alt="Rumy Logo" class="rumy-logo"></a>
+						</div>
+						<div class="col-md-6 col-sm-6 col-xs-6 text-right navicon">
+							<p>MENU</p><a id="trigger-overlay" class="nav_slide_button nav-toggle" href="#"><span></span></a>
+						</div>
+					</div>
+					<div class="row rumy-content">
+						<div class="col-md-12">
+							<h1 class="animated fadeInDown">Contact Us</h1>
+						</div>
+					</div>
+				</div>
+			</section>
+		</header>
+        
+        <div class="contact-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-sm-12 clearfix">
+                    <form id="contact-form" method="post" action="{{=URL('default', 'mailtous')}}" role="form">
+                      <div class="form-group">
+                        <label for="InputName">First Name</label>
+                        <div class="input-group">
+                          <input type="text" class="form-control" name="name" id="InputName" placeholder="Enter First Name" required="required" data-error="Firstname is required." />
+                          <span class="input-group-addon"><i class="glyphicon glyphicon-ok form-control-feedback"></i></span></div>
+                      </div>
+                      <div class="form-group">
+                        <label for="InputName">Last Name</label>
+                        <div class="input-group">
+                          <input type="text" class="form-control" name="surname" id="InputName" placeholder="Enter Last Name" required="required" data-error="Lastname is required." />
+                          <span class="input-group-addon"><i class="glyphicon glyphicon-ok form-control-feedback"></i></span></div>
+                      </div>
+                      <div class="form-group">
+                        <label for="InputEmail">Your Email</label>
+                        <div class="input-group">
+                          <input type="email" class="form-control" id="InputEmail" name="email" placeholder="Enter Email" required="required" data-error="Valid email is required." />
+                          <span class="input-group-addon"><i class="glyphicon glyphicon-ok form-control-feedback"></i></span></div>
+                      </div>
+                      <div class="form-group">
+                        <label for="InputEmail">Phone No.</label>
+                        <div class="input-group">
+                          <input type="tel" class="form-control" id="InputPhone" name="phone" placeholder="Enter Phone No." required="required" data-error="Valid Phone No." />
+                          <span class="input-group-addon"><i class="glyphicon glyphicon-ok form-control-feedback"></i></span></div>
+                      </div>
+                      <div class="form-group">
+                        <label for="InputMessage">Message</label>
+                        <div class="input-group">
+                          <textarea name="message" id="InputMessage" class="form-control" rows="5" required></textarea>
+                          <span class="input-group-addon"><i class="glyphicon glyphicon-ok form-control-feedback"></i></span></div>
+                      </div>
+                      <input type="submit" name="submit" id="submit" value="Submit" class="btn btn-info pull-right" />
+                    </form>
+                </div>
+                <script type="text/javascript">
+                    $(function () {
+                        $('#contact-form').validator();
+                            $('#contact-form').on('submit', function (e) {
+                                if (!e.isDefaultPrevented()) {
+                                    var url = "mailtous";
+                                    $.ajax({
+                                        type: "POST",
+                                        url: url,
+                                        data: $(this).serialize(),
+                                        success: function (data)
+                                        {
+                                            var messageAlert = 'alert-' + data.type;
+                                            var messageText = data.message;
+
+                                            var alertBox = '<div class="alert ' + messageAlert + ' alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' + messageText + '</div>';
+                                            if (messageAlert && messageText) {
+                                                $('#contact-form').find('.messages').html(alertBox);
+                                                $('#contact-form')[0].reset();
+                                            }
+                                        }
+                                    });
+                                    return false;
+                                }
+                            })
+                        });
+                    });
+                </script>
+                <div class="col-md-6 col-sm-12">
+                        <div id="address-area">
+                            <div class="address-text">
+                                <h3 class="address-header">
+                                    Bangladesh Office
+                                </h3>
+                                <p>Rumy Technologies</p>
+                                <p>1005/2 East Nasirabad</p>
+                                <p>CDA Avenue</p>
+                                <p>Chittagong, Bangladesh</p>
+                            </div>
+                            <div class="address-text">
+                                <h3 class="address-header">
+                                    Texas Office
+                                </h3>
+                                <p>R604, Causley Ave, #112</p>
+                                <p>Arlington, Texas</p>
+                                <p>76010</p>
+                                <p>USA</p>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+        </div>
+
+        <footer id="footer">
+            <div class="footer-bottom">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="logo-mark visible-xs">
+                                <img src="{{=URL('static','images/logo-mobile.png')}}" class="footer-logo" />
+                            </div>
+                            <p>© 2016 Stellar <span>/</span><a href="mailto:admin@rumytechnologies.com">admin@rumytechnologies.com</a> <span>/</span>CDA Avenue, Chittagong, Bangladesh</p>
+                            <ul class="list-unstyled">
+                                <li><a href="https://www.facebook.com/stlrbd/" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i> <span>Facebook</span></a></li>
+                                <li></li>
+                                <li><a href="https://twitter.com/RumyTech" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i> <span>Twitter</span></a></li>
+                                <li><a href="https://www.pinterest.com/RumyRemote/" target="_blank"><i class="fa fa-pinterest" aria-hidden="true"></i> <span>Pinterest</span></a></li>
+                                <li><a href="https://www.linkedin.com/company/rumy" target="_blank"><i class="fa fa-linkedin" aria-hidden="true"></i> <span>LinkedIn</span></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+		<div class="overlay overlay-boxify">
+			<nav>
+				<ul>
+					<li><a href="{{=URL('default','product')}}"><i class="fa fa-shopping-cart"></i>Products</a></li>
+					<li><a href="{{=URL('default','expertise')}}"><i class="fa fa-asterisk"></i>Expertise</a></li>
+				</ul>
+				<ul>
+                    <li><a href="{{=URL('default','about')}}"><i class="fa fa-info"></i>About</a></li>
+				    <li><a href="{{=URL('default','contact')}}"><i class="fa fa-envelope"></i>Contact</a></li>
+					<!--<li><a href="career.html"><i class="fa fa-suitcase"></i>Career</a></li>-->
+				</ul>
+			</nav>
+		</div>
+		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+		<script src="{{=URL('static','js/jquery.min.js')}}"></script>
+		<script src="{{=URL('static','js/bootstrap.min.js')}}"></script>
+		<script src="{{=URL('static','js/scripts.js')}}"></script>
+        <script type="text/javascript">
+    $(window).load(function(){
+        $('#myModal').modal('show');
+    });
+</script>
+	</body>
+</html>

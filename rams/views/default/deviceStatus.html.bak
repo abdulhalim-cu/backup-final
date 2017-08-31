@@ -1,0 +1,51 @@
+{{extend 'layout.html'}}
+
+
+<div id="page-title">
+    <h2>Device Status</h2>
+</div>
+<div class="panel">
+    <div class="panel-body">
+<table id="device-status" class="table table-striped" cellspacing="0" width="100%">
+    <thead>
+    <tr>
+        <th>Unit Name</th>
+        <th>Last Connected Date</th>
+        <th>Last Connected Time</th>
+        <th>Alive</th>
+    </tr>
+    </thead>
+    <tbody>
+                {{for unit in units:}}
+                    {{status = db((db.Alive.client_id==unit.client_id) & (db.Alive.unit_id==unit.unit_id)).select().first()}}
+                    {{if status:}}
+                    <tr>
+                        <td>{{=db.Units(db.Units.unit_id==status.unit_id).unit_name}}</td>
+                        {{
+                        date = status.last_connected.strftime("%d-%m-%Y")
+                        d = status.last_connected.strftime("%I:%M %p")
+                        }}
+                        <td>{{=date}}</td>
+                        <td>{{=d}}</td>
+                        {{
+                        def getTimeDifferenceFromNow(TimeStart, TimeEnd):
+                            timeDiff = TimeEnd - TimeStart
+                            return timeDiff.total_seconds() / 60
+
+                        from datetime import datetime
+                        d1 = status.server_datetime
+                        d2 = datetime.now()
+                        min=int(getTimeDifferenceFromNow(d1,d2))
+                        if min > 20:
+                        }}
+                        <td>No</td>
+                        {{else:}}
+                        <td>Yes</td>
+                        {{pass}}
+                    </tr>
+                    {{pass}}
+                {{pass}}
+    </tbody>
+</table>
+</div>
+</div>

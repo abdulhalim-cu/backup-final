@@ -1,0 +1,156 @@
+{{extend 'layout.html'}}
+<style>
+input.submit {
+    width: 150px;
+    margin : 2px;
+    padding: 8px;
+}
+</style>
+
+{{
+from datetime import datetime
+import calendar
+import pytz
+}}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-2 col-md-2 col-sm-3 col-xs-12">
+            <div>
+                {{if auth.user:}}
+                <h2>
+                    Hi!, {{="%(first_name)s %(last_name)s"  % auth.user}}
+                </h2>
+                <h4>
+                    {{="%(institution_name)s" % auth.user}}
+                </h4>
+                {{pass}}
+            </div>
+            <div>
+                <h3>
+                    Units
+                </h3>
+                <form action="{{=URL('default','all_unit_log')}}" method="post">
+                    <input type="submit" class="btn btn-primary submit" name="all_unit" value="All Units" />
+                </form>
+                {{for q in query:}}
+                    {{unit_name = db.Units(db.Units.unit_id==q.unit_id).unit_name}}
+                    <form action="{{=URL('default', 'unit_log', vars={'unit':q.unit_id,'log':1})}}" method="post">
+                        <input type="submit" class="btn btn-primary submit" name="unit_log" value="{{=unit_name}}">
+                    </form>
+                {{pass}}
+            </div>
+
+            <div>
+                <h3>
+                    Absent Users
+                </h3>
+                <form action="{{=URL('default', 'absent')}}" method="post">
+                    <input type="submit" class="btn btn-primary submit" name="absent" value="absent">
+                </form>
+                <form action="{{=URL('default', 'total_absent')}}" method="post">
+                    <input type="submit" class="btn btn-primary submit" name="absent" value="absent_in_a_month">
+                </form>
+                <form action="{{=URL('default', 'absent')}}" method="post">
+                    <input type="submit" class="btn btn-primary submit" name="absent" value="absent_between_two_days">
+                </form>
+            </div>
+        </div>
+        <div>
+            <h2>
+                {{user = db(db.Client_User.client_id==cid).select(db.Client_User.user_id)}}
+                Total Users: {{=len(user)}}
+            </h2>
+            <h2>
+                {{length = 0}}
+                {{for q in query:}}
+                    {{dt = datetime.now(pytz.timezone('Asia/Dhaka')).date()}}
+                    {{log = db((db.Users_Log.unit_id==q.unit_id) & (db.Users_Log.access_date==dt)).select(db.Users_Log.user_id)}}
+                    {{length += len(log)}}
+                {{pass}}
+                Today's Total Access:  {{=length}}
+            </h2>
+            <h2>
+               {{
+                def getTimeDifferenceFromNow(TimeStart, TimeEnd):
+                    timeDiff = TimeEnd - TimeStart
+                    return timeDiff.total_seconds() / 60
+                
+                units = db(db.Client_Unit.client_id==cid).select(db.Client_Unit.unit_id)
+                alive = 0
+                dead = 0
+                for unit in units:
+                    status = db((db.Alive.client_id==cid) & (db.Alive.unit_id==unit.unit_id)).select().first()
+                    if status:
+                        date = status.last_connected.strftime("%d-%m-%Y")
+                        d = status.last_connected.strftime("%I:%M %p")
+                        d1 = status.server_datetime
+                        d2 = datetime.now()
+                        min=int(getTimeDifferenceFromNow(d1,d2))
+                        if min > 20:
+                            dead += 1
+                        else:
+                            alive += 1
+                        pass
+                    pass
+                pass
+                }}
+                {{if dead > 0:}}
+                    <h2>
+                        Total dead: {{=dead}}
+                </h2>
+                {{elif alive > 0:}}
+                    <h2>Total alive: {{=alive}}</h2>
+                {{pass}}
+            </h2>
+        </div>
+        <div class="col-lg-10 col-md-10 col-sm-9 col-xs-12">
+            <div class="all_unit_log">
+                <h2 class="text-center">
+                   Today's Log
+                </h2>
+                <div class="unit">
+                    {{if int(request.vars.log) > 1:}}
+                    <a href={{=URL(vars={'log':int(request.vars.log)-1})}}>Previous</a> |
+                    <a href={{=URL(vars={'log':int(request.vars.log)+1})}}>Next</a>
+                    {{else:}}
+                    <a href={{=URL(vars={'log':int(request.vars.log)+1})}}>Next</a>
+                    {{pass}}
+                    
+                    <table class="table table-bordered">
+                        <tr style="background-color:#FF6600; font-size: 21px; color:#FFFFFF; font-weight:bold;">
+                            <td>Unit Name</td>
+                            <td>User ID</td>
+                            <td>User Name</td>
+                            <td>Access Date</td>
+                            <td>Access Time</td>
+                        </tr>
+                        {{for q in query:}}
+                            {{dt = datetime.now(pytz.timezone('Asia/Dhaka')).date()}}
+                            {{log = db((db.Users_Log.unit_id==q.unit_id) & (db.Users_Log.access_date==dt)).select(limitby=(start,end))}}
+                            {{if len(log) > 0:}}
+                                {{for lg in log:}}
+                                    {{uuid = db((db.Unit_Users.unit_id==lg.unit_id) & (db.Unit_Users.user_id==lg.user_id)).select(db.Unit_Users.uuid).first()}}
+                                    {{if uuid:}}
+                                        {{name=db(db.User_Info.uuid==uuid.uuid).select(db.User_Info.user_name).first()}}
+                                        <tr>
+                                            <td>{{=db.Units(db.Units.unit_id==lg.unit_id).unit_name}}</td>
+                                            <td>{{=lg.user_id}}</td>
+                                            <td>{{=name.user_name}}</td>
+                                            <td>{{=lg.access_date}}</td>
+                                            <td>{{=lg.access_time}}</td>
+                                         </tr>
+                                    {{pass}}
+                                {{pass}}
+                            {{pass}}
+                        {{pass}}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+</script>

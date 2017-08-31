@@ -1,0 +1,56 @@
+{{extend 'layout.html'}}
+
+{{if query:}}
+<div id="page-title">
+    <h2>All Unit Log</h2>
+</div>
+<div class="panel">
+    <div class="panel-body">
+        <table id="all_unit_log" class="table table-striped" cellspacing="0" width="100%">
+            <thead>
+            <tr>
+                <th>Unit Name</th>
+                <th>User ID</th>
+                <th>User Name</th>
+                <th>Access Date</th>
+                <th>Access Time</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{for q in query:}}
+                {{unit_id=q.unit_id}}
+                {{log = db(db.Users_Log.unit_id==unit_id).select(orderby=~db.Users_Log.access_date)}}
+                {{if log:}}
+                    {{for lg in log:}}
+                        {{uuid = db((db.Unit_Users.unit_id==unit_id) & (db.Unit_Users.user_id==lg.user_id)).select(db.Unit_Users.uuid).first()}}
+                        {{if uuid:}}
+                            {{name=db(db.User_Info.uuid==uuid.uuid).select(db.User_Info.user_name).first()}}
+                            <tr>
+                                <td>{{=db.Units(db.Units.unit_id==unit_id).unit_name}}</td>
+                                <td>{{=lg.user_id}}</td>
+                                <td>{{=name.user_name}}</td>
+                                <td>{{=lg.access_date}}</td>
+                                <td>{{=lg.access_time}}</td>
+                             </tr>
+                        {{pass}}
+                    {{pass}}
+                {{pass}}
+            {{pass}}
+            </tbody>
+        </table>
+    </div>
+</div>
+{{pass}}
+
+<script type="text/javascript">
+    $(document).ready(function() {
+    $('#all_unit_log').DataTable( {
+        paging:         true,
+        lengthMenu: [ 10, 25, 50, 75, 100 ],
+        dom: 'lfBrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+    });
+    } );
+</script>

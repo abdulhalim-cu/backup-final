@@ -1,0 +1,12 @@
+{{extend 'layout.html'}}
+
+<div>
+    {{for i in range(0,len(c)):}}
+        {{=c[i]}}
+    {{pass}}
+</div>
+<div>
+    {{for i in range(0, len(usr)):}}
+        {{=usr[i]}}
+    {{pass}}
+</div>

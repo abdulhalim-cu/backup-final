@@ -1,0 +1,56 @@
+{{extend 'layout.html'}}
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-sm-12">
+            <form>
+                {{for u in user:}}
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" class="form-control" id="name" placeholder="{{=u.user_name}}">
+                </div>
+                <div class="form-group">
+                    <label for="dprt">Department</label>
+                    <input type="text" class="form-control" id="dprt" placeholder="{{=u.department}}">
+                </div>
+                <div class="form-group">
+                    <label for="card">Card</label>
+                    <input type="text" class="form-control" id="card" placeholder="{{=u.card}}">
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone</label>
+                    <input type="phone" class="form-control" id="phone" placeholder="{{=u.phone}}">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" id="email" placeholder="{{=u.email}}">
+                </div>
+                <div class="form-group">
+                    <label for="fathername">Fathername</label>
+                    <input type="text" class="form-control" id="fathername" placeholder="{{=u.fathername}}">
+                </div>
+                <div class="form-group">
+                    <label for="mother">Mothername</label>
+                    <input type="text" class="form-control" id="mother" placeholder="{{=u.mothername}}">
+                </div>
+                <div class="form-group">
+                    <label for="addr">Address</label>
+                    <input type="text" class="form-control" id="addr" placeholder="{{=u.address}}">
+                </div>
+                <div class="form-group">
+                    <label for="sess">Session</label>
+                    <input type="text" class="form-control" id="sess" placeholder="{{=u.class_session}}">
+                </div>
+                <div class="form-group">
+                    <label for="roll">Roll No.</label>
+                    <input type="text" class="form-control" id="roll" placeholder="{{=u.classroll}}">
+                </div>
+                <div class="form-group">
+                    <label for="pri">Privilege</label>
+                    <input type="number" class="form-control" id="pri" placeholder="{{=u.privilege}}">
+                </div>
+                <input type="submit" name="submit" class="pull-right" value="Update" />
+                {{pass}}
+            </form>
+        </div>
+    </div>
+</div>

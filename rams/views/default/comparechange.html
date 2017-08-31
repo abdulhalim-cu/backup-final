@@ -1,0 +1,18 @@
+{{extend 'layout1.html'}}
+
+<div>
+    <table>
+        <tr>
+            <td>UnitID</td>
+            <td>UserID</td>
+            <td>Access</td>
+        </tr>
+        {{while rows:}}
+        <tr>
+            <td>{{=rows.unit_id}}</td>
+            <td>{{=rows.user_id}}</td>
+            <td>{{=rows.access_type}}</td>
+        </tr>
+        {{pass}}
+    </table>
+</div>

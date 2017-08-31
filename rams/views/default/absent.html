@@ -1,0 +1,82 @@
+{{extend 'layout.html'}}
+<style>
+#export {
+    margin-bottom: 20px;
+}
+</style>
+<link rel='stylesheet' type='text/css' src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.0.1/fullcalendar.min.css'/>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment-with-locales.js" integrity="sha256-3fxihb9DVbP4/hwpFR8FvyH0NrDjbDO3pRbPxmUDaUE=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.0.1/fullcalendar.min.js"></script>
+<script type='text/javascript' src="{{=URL('static','js/jquery.tabletoCSV.js')}}"></script>
+<div id="page-title">
+    <h2>Absent Users</h2>
+</div>
+<button id="export" data-export="export">Export as CSV</button>
+<div class="panel">
+    <div class="panel-body">
+        <table id="absent_user" class="table table-striped" cellspacing="0" width="100%">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>First Access</th>
+            <th>Last Access</th>
+            <th>Absent</th>
+            <th>Mail</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{if client_user:}}
+            {{for user in  client_user:}}
+                {{uuid=user.uuid}}
+                {{user_id=user.user_id}}
+                {{attend = db((db.Last_Attended.uuid==uuid)).select(db.Last_Attended.attend_date,db.Last_Attended.attend_time).first()}}
+                {{if attend:}}
+                    {{
+                    from datetime import datetime, timedelta
+                    attend_date = attend.attend_date
+                    attend_time = attend.attend_time
+                    now = datetime.now().date()
+                    absent = db((db.Absent_Count.uuid==uuid) & (db.Absent_Count.absent_days <= now) & \
+                        (db.Absent_Count.absent_days >= attend_date) & (db.Absent_Count.consecutive_count > 0)).select()
+                    mail = db(db.User_Info.uuid==uuid).select(db.User_Info.email).first()
+                    if absent:
+                        for ab in absent:
+                    }}
+            <tr>
+                        <td>{{=ab.user_id}}</td>
+                        {{name = db((db.User_Info.uuid==ab.uuid)).select(db.User_Info.user_name).first()}}
+                        <td>{{=name.user_name}}</td>
+                        {{days = db(db.Absent_Count.absent_id==ab.absent_id).select(db.Absent_Count.absent_days)}}
+                        <td>{{=min(dt.absent_days for dt in days)}}</td>
+                        <td>{{=max(dt.absent_days for dt in days)}}</td>
+                        <td>{{=ab.consecutive_count}}</td>
+                        <td><a class="btn btn-primary btn-sm" href="{{=URL('default','email',vars={'mail':\
+                                    mail.email})}}">Email</a></td>
+            </tr>
+                       {{pass}}
+                    {{pass}}
+                {{else:}}
+                    {{name = db(db.User_Info.uuid==uuid).select(db.User_Info.user_name).first()}}
+                    <tr>
+                        <td>{{=user_id}}</td>
+                        <td>{{=name.user_name}}</td>
+                        <td>Never accessed</td>
+                        <td>Never accessed</td>
+                        <td></td>
+                        {{mail = db(db.User_Info.uuid==uuid).select(db.User_Info.email).first()}}
+                        <td><a class="btn btn-primary btn-sm" href="{{=URL('default','email',vars={'mail':mail.email})}}">Email</a></td>
+                    </tr>
+                {{pass}}
+            {{pass}}
+        {{pass}}
+        </tbody>
+    </table>
+</div>
+</div>
+
+<script type='text/javascript'>
+$("#export").click(function(){
+  $("table").tableToCSV();
+});
+</script>

@@ -1,0 +1,90 @@
+{{extend 'layout.html'}}
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+  <script type='text/javascript' src="{{=URL('static','js/jquery.tabletoCSV.js')}}"></script>
+
+<div id="page-title">
+    <h2>Absent Logs</h2>
+</div>
+<div class="panel">
+<div class="panel-body">
+                <form action="" method="post">
+                    <table class="table table-bordered">
+                    <tr>
+                        <td>From</td>
+                        <td>To</td>
+                        <td>Action</td>
+                    </tr>
+                    <tr>
+                        <td>
+                    <input type="date" id="datepicker" name="start" required/>
+                        </td>
+                        <td>
+                            <input type="date" id="datepicker1" name="end" required/>
+                        </td>
+                        <td>
+                    <input class="btn btn-primary btn-sm" type="submit" name='submit' value="submit" />
+                        </td>
+                        </tr>
+                    </table>
+                </form>
+    </div></div>
+
+<button id="export" data-export="export">Export as CSV</button>
+<div class="panel">
+    <div class="panel-body">
+        <table id="absent_user" class="table table-striped" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th>User ID</th>
+                    <th>User Name</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Total Absent</th>
+                </tr>
+            </thead>
+            <tbody>
+            {{if start !=0 and end !=0 and client_user !=0:}}
+                {{for user in client_user:}}
+                    {{absent = db((db.Absent_Count.uuid==user.uuid) & (db.Absent_Count.absent_days >= start) & (db.Absent_Count.absent_days \
+                <= end) & (db.Absent_Count.consecutive_count > 1)).select()}}
+                    {{if absent:}}
+                        {{for ab in absent:}}
+                        <tr>
+                            <td>{{=user.user_id}}</td>
+                            {{name = db((db.User_Info.uuid==user.uuid) &\
+                            (db.User_Info.user_id==user.user_id)).select(db.User_Info.user_name).first()}}
+                            <td>{{=name.user_name}}</td>
+                            {{days = db(db.Absent_Count.absent_id==ab.absent_id).select(db.Absent_Count.absent_days)}}
+                            <td>{{=min(dt.absent_days for dt in days)}}</td>
+                            <td>{{=max(dt.absent_days for dt in days)}}</td>
+                            <td>{{=ab.consecutive_count}}</td>
+                        </tr>
+                        {{pass}}
+                    {{pass}}
+                {{pass}}
+            {{pass}}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+  $( function() {
+    $( "#datepicker" ).datepicker( {
+        dateFormat : "yy-mm-dd"
+    });
+  } );
+</script>
+<script>
+  $( function() {
+    $( "#datepicker1" ).datepicker( {
+        dateFormat : "yy-mm-dd"
+    });
+  } );
+</script>
+<script type='text/javascript'>
+$("#export").click(function(){
+  $("#absent_user").tableToCSV();
+});
+</script>

@@ -1,0 +1,74 @@
+{{extend 'layout.html'}}
+{{import calendar}}
+{{from datetime import datetime, timedelta}}
+<link rel='stylesheet' type='text/css' href="{{=URL('static','css/fullcalendar.min.css')}}"/>
+<script type="text/javascript" src="{{=URL('static','js/moment.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static','js/fullcalendar.min.js')}}"></script>
+
+<div class="panel">
+<div class="panel-body">
+        <div class="col-md-12 col-sm-12">
+            <form action="" method="post">
+                <table class="table table-bordered">
+                    <tr>
+                        <td>User ID</td>
+                        <td>Month</td>
+                        <td>Action</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="text" name="user_id" id="userId" placeholder="Enter User Id"/></td>
+                        <td>
+                <select id="month" name="month">
+                    {{i=1}}
+                    {{while i < 13:}}
+                        <option value="{{=i}}">{{=calendar.month_name[i]}}</option>
+                        {{i += 1}}
+                    {{pass}}
+                </select>
+                    </td>
+                <td>
+                <input class="btn btn-primary btn-sm" type="submit" name="submit" value="submit">
+                </td>
+                </tr>
+            </table>
+            </form>
+        </div>
+    </div>
+</div>
+{{if days:}}
+<div id='calendar'></div>
+<script>
+	$(document).ready(function() {
+		$('#calendar').fullCalendar({
+            header: {
+				left: 'title',
+				right: 'month,listMonth'
+			},
+			events: [
+                {{for d in days[1]:}}
+				{
+					title: 'absent',
+					start: '{{=d}}',
+                    overlap: false,
+                    rendering: 'background',
+                    color: 'red'
+				},
+                {
+					title: 'absent',
+					start: '{{=d}}',
+                    textColor: '#fff',
+                    backgroundColor: 'red'
+				},
+                {{pass}}
+                {
+                    title: 'vacation',
+                    start: '2000-10-25'
+                }
+			],
+            eventBorderColor: 'transparent',
+            defaultDate: moment('{{=days[1][0]}}'),
+		});
+	});
+</script>
+{{pass}}

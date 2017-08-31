@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html class="no-js" lang="{{=T.accepted_language or 'en'}}"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <!-- www.phpied.com/conditional-comments-block-downloads/ -->
+    <!-- Always force latest IE rendering engine
+         (even in intranet) & Chrome Frame
+         Remove this if you use the .htaccess -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge{{=not request.is_local and ',chrome=1' or ''}}">
+    <!--  Mobile Viewport Fix
+          j.mp/mobileviewport & davidbcalhoun.com/2010/viewport-metatag
+          device-width: Occupy full width of the screen in its current orientation
+          initial-scale = 1.0 retains dimensions instead of zooming out if page height > device height
+          user-scalable = yes allows the user to zoom in -->
+    <meta name="google-site-verification" content="ew043yDSZ10JpqO2iIYgJdc762UjU_G0hMFrC1h8Rsw" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{=response.title or request.application}}</title>
+    <!-- http://dev.w3.org/html5/markup/meta.name.html -->
+    <meta name="application-name" content="{{=request.application}}">
+    <!-- Speaking of Google, don't forget to set your site up:
+         http://google.com/webmasters -->
+    <meta name="google-site-verification" content="">
+    <!-- include stylesheets -->
+    <link rel="stylesheet" href="{{=URL('static','css/bootstrap.css')}}"/>
+    <link rel="stylesheet" href="{{=URL('static','css/animate.css')}}"/>
+    <link rel="stylesheet" href="{{=URL('static','css/bootstrap-select.min.css')}}"/>
+    <link rel="stylesheet" href="{{=URL('static','css/font-awesome.css')}}"/>
+    <link rel="stylesheet" href="{{=URL('static','css/main.css')}}"/>
+    <link rel="stylesheet" href="{{=URL('static','css/web2py-bootstrap3.css')}}"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans|Raleway|Raleway+Dots"/>
+    <link rel="stylesheet" href="{{=URL('static','css/datatables.min.css')}}"/>
+
+    <link rel="shortcut icon" href="{{=URL('static','images/favicon.ico')}}" type="image/x-icon">
+    <link rel="apple-touch-icon" href="{{=URL('static','images/favicon.png')}}">
+    <!-- All JavaScript at the bottom, except for Modernizr which enables
+         HTML5 elements & feature detects -->
+    <script src="{{=URL('static','js/modernizr-2.8.3.min.js')}}"></script>
+    <!--[if lt IE 9]>
+        <script src="{{=URL('static','js/respond-1.4.2.min.js')}}"></script>
+        <![endif]-->
+    <!-- Favicons -->
+{{include 'web2py_ajax.html'}} <!-- this includes jquery.js, calendar.js/.css and web2py.js -->
+{{block head}}{{end}}
+{{
+# using sidebars need to know what sidebar you want to use
+mc0 = 'col-md-12'
+mc1 = 'col-md-9'
+mc2 = 'col-md-6'
+left_sidebar_enabled = globals().get('left_sidebar_enabled', True)
+right_sidebar_enabled = globals().get('right_sidebar_enabled', False)
+middle_column = {0: mc0, 1: mc1, 2: mc2}[
+(left_sidebar_enabled and 1 or 0)+(right_sidebar_enabled and 1 or 0)]
+}}
+</head>
+<body>
+<!--[if lt IE 8]><p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
+<div class="w2p_flash alert alert-dismissable">{{=response.flash or ''}}</div>
+<div id="admin-panel">
+    <!-- Navbar ======================================= -->
+    <div class='container-fluid' id="page-wrapper">
+        <div class="row">
+            <div id="page-header" class="col-md-12 bg-gradient-8">
+                <div id="header-logo" class="logo-bg">
+                    <a href="{{=URL('default','index')}}" class="logo-content-big" title="AMSS Admin">
+                        AMSS Admin
+                    </a>
+                </div>
+                <div id="header-nav-right">
+                    <div class="user-account-btn dropdown">
+                        <a href="#" title="My Account" class="user-profile clearfix" data-toggle="dropdown"> <img
+                                width="28" src="{{=URL('static','images/avatar.png')}}" alt="Profile image">
+                        {{data_layout = db(db.auth_user.id == auth.user_id).select()}}
+                        {{for d_layout in data_layout:}}
+                            <span>{{=d_layout.first_name}} {{=d_layout.last_name}}</span>
+                        {{pass}}
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                        <div class="dropdown-menu float-left">
+                            <div class="box-sm">
+                                <div class="login-box clearfix">
+                                    <div class="user-img"><img src="{{=URL('static','images/avatar.png')}}" alt="">
+                                    </div>
+                                    <div class="user-info">
+                                    {{for d_layout in data_layout:}}
+                                        <span>{{=d_layout.first_name}} {{=d_layout.last_name}}
+                                            <i>{{=d_layout.institution_name}}</i></span>
+                                    {{pass}}
+                                        <a href="{{=URL('default','user/profile')}}" title="Edit profile">Edit
+                                            Profile</a> <a href="{{=URL('default','user/change_password')}}"
+                                                           title="Change Password">Change Password</a>
+                                    </div>
+                                </div>
+                                <div class="button_logout button-pane button-pane-alt text-center">
+                                    <a href="{{=URL('default','user/logout')}}"
+                                       class="btn display-block font-normal btn-danger"> <i class="fa fa-power-off"></i>
+                                        Logout </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- #header-nav-left -->
+            </div>
+        </div>
+    </div>
+    <!-- Masthead ===================================== -->
+{{block header}}
+{{end}}
+    <!-- Main ========================================= -->
+    <!-- Begin page content -->
+    <div class="container-fluid main-container">
+        <div class="row">
+        {{if left_sidebar_enabled:}}
+            <div id="page-sidebar" class="col-md-3 col-sm-3">
+            {{block left_sidebar}}
+                <div class="scroll-sidebar">
+                    <div class="admin-action-bar">
+                        <div class="admin-image">
+                           <img src="{{=URL('static','images/avatar.png')}}" alt="">
+                        </div>
+                        <div class="admin-action-info">
+                            <span>Welcome</span>
+                        {{data_layout = db(db.auth_user.id==auth.user_id).select()}}
+                        {{for d in data_layout:}}
+                            <h3>{{=d.first_name}} {{=d.last_name}}</h3>
+                        {{pass}}
+                        </div>
+                    </div>
+                    <ul id="sidebar-menu" class="sf">
+                        <!--<li class="header"><span>Overview</span></li>-->
+                        <li>
+                            <a href="{{=URL('default','index')}}" title="Admin Dashboard" class="sf"> <i
+                                    class="fa fa-tachometer"></i> <span>Admin dashboard</span> </a>
+                        </li>
+                        <!--<li>
+                            <a href="{{#=URL('default','deviceStatus')}}" title="Device Status" class="sf"> <i
+                                    class="fa fa-info-circle"></i> <span>Device Status</span></a>
+                        </li>-->
+                        <li class="header"><span>Access Logs</span></li>
+                        <li>
+                            <a href="{{=URL('default','log_today')}}" title="Today's Log" class="sf"> <i
+                                    class="fa fa-history"></i> <span>Today's Log</span> </a>
+                        </li>
+                        <li>
+                            <a data-toggle="collapse" href="#allunits" title="Logs by units" class="sf-with-ul"
+                               data-parent="#sidebar-menu"> <i class="fa fa-television"></i> <span>Logs by units</span> </a>
+                            <div class="sidebar-submenu panel-collapse collapse" id="allunits">
+                            {{#cid_layout = db.auth_user(db.auth_user.id==auth.user_id).client_id}}
+                            {{if auth.user:}}
+                            {{cid_layout = "%(client_id)s" % auth.user}}
+                            {{query_layout = db(db.Client_Unit.client_id==cid_layout).select(db.Client_Unit.unit_id)}}
+                                <ul>
+                                {{if query_layout:}}
+                                {{for q in query_layout:}}
+                                {{unit_name = db.Units(db.Units.unit_id==q.unit_id).unit_name}}
+                                    <li>
+                                        <a href="{{=URL('default', 'unit_log', args=q.unit_id)}}"><span>{{=unit_name}}</span></a>
+                                    </li>
+                                {{pass}}
+                                {{pass}}
+                                    <!--<li><a href="{{=URL('default','all_unit_log')}}"><span>All Unit Log</span></a></li>-->
+                                </ul>
+                             {{pass}}
+                            </div>
+                            <!-- .sidebar-submenu -->
+                        </li>
+                        <li>
+                            <a href="{{=URL('default','absent_log')}}" title="Absent" class="sf"> <i
+                                    class="fa fa-exclamation-triangle"></i> <span>Absent Logs</span> </a>
+                        </li>
+                        <li>
+                            <a href="{{=URL('default','total_absent')}}" title="Absent" class="sf"> <i
+                                    class="fa fa-bell"></i> <span>Absent Per Month</span> </a>
+                        </li>
+                        <li class="header"><span>Control Panel</span></li>
+                        <li>
+                            <a href="{{=URL('default','usermanagement')}}" title="Manage Existing User" class="sf"><i
+                                    class="fa fa-universal-access"></i><span>Access Control</span></a>
+                        </li>
+                        <li>
+                            <a data-toggle="collapse" href="#usermanagement111" title="Logs by units" class="sf-with-ul"
+                               data-parent="#sidebar-menu"> <i class="fa fa-users"></i> <span>User Management</span> </a>
+                            <div class="sidebar-submenu panel-collapse collapse" id="usermanagement111">
+                                <ul>
+                                    <li>
+                                        <a href="{{=URL('default', 'UserRegistration')}}"><span>Add User</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="{{=URL('default', 'delete_user')}}"><span>Delete User</span></a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- .sidebar-submenu -->
+                        </li>
+                        <li>
+                            <a data-toggle="collapse" href="#unitmanagement111" title="Logs by units" class="sf-with-ul"
+                               data-parent="#sidebar-menu"> <i class="fa fa-mobile"></i> <span>Unit Management</span> </a>
+                            <div class="sidebar-submenu panel-collapse collapse" id="unitmanagement111">
+                                <ul>
+                                    <li>
+                                        <a href="{{=URL('default', 'addunit')}}"><span>Add Unit</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="{{=URL('default', 'delete_unit')}}"><span>Delete Unit</span></a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- .sidebar-submenu -->
+                        </li>
+                        <li>
+                            <a href="{{=URL('default','leavemanagement')}}" title="Leave Management" class="sf"><i
+                                    class="fa fa-lightbulb-o"></i><span>Leave Management</span></a>
+                        </li>
+                        <li>
+                            <a href="{{=URL('default','absent')}}" title="Absent Users" class="sf"><i
+                                    class="fa fa-exclamation-circle"></i><span>Alert Users</span></a>
+                        </li>
+                    </ul>
+                    <!-- #sidebar-menu -->
+                </div>
+            {{end}}
+            </div>
+        {{pass}}
+
+            <div id="page-content" class="col-md-9 col-sm-9">
+                <div class="page-body">
+            {{block center}}
+            {{include}}
+            {{end}}
+                    </div>
+            </div>
+
+        {{if right_sidebar_enabled:}}
+            <div class="col-md-3">
+            {{block right_sidebar}}
+                <h3>Right Sidebar</h3>
+                <p></p>
+            {{end}}
+            </div>
+        {{pass}}
+        </div>
+    </div>
+
+{{block footer}} <!-- this is default footer -->
+    <!--<footer class="footer">
+        <div class="container-fluid">
+            <div class="copyright pull-left">{{=T('Copyright')}} &#169; {{=request.now.year}}</div>
+            <div id="poweredBy" class="pull-right">
+            {{=T('Powered by')}}
+                <a href="http://www.web2py.com/">web2py</a>
+            </div>
+        </div>
+    </footer>-->
+</div>
+{{end}}
+<!-- The javascript =============================== -->
+<script src="{{=URL('static','js/main.js')}}"></script>
+<script src="{{=URL('static','js/bootstrap.js')}}"></script>
+<script src="{{=URL('static','js/web2py-bootstrap3.js')}}"></script>
+<script src="{{=URL('static','js/bootstrap-select.min.js')}}"></script>
+<script src="{{=URL('static','js/datatables.min.js')}}"></script>
+{{block page_js}}{{end page_js}}
+</body>
+</html>

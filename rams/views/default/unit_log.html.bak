@@ -1,0 +1,51 @@
+{{extend 'layout.html'}}
+
+{{if logs:}}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <h2 class="text-center">
+                {{=unit_name}}'s Access Logs [Today]
+            </h2>
+            <!--
+            <button onclick="goBack()">Go Back</button>
+            -->
+            <script>
+            function goBack() {
+                window.history.back();
+            }
+            </script>
+            <div>
+                <a href={{=URL('default', 'unit_log', vars={'unit':unit_id,'log':int(request.vars.log)-1})}}>Previous</a> |
+                <a href={{=URL('default', 'unit_log', vars={'unit':unit_id,'log':int(request.vars.log)+1})}}>Next</a>
+                <table class="table table-bordered">
+                    <tr style="background-color:#FF6600; font-size: 21px; color:#FFFFFF; font-weight:bold;">
+                        <td>User ID</td>
+                        <td>User Name</td>
+                        <td>Access Date</td>
+                        <td>Access Time</td>
+                    </tr>
+                        {{for lg in logs:}}
+                        <tr>
+                            {{uuid = db((db.Unit_Users.unit_id==lg.unit_id) & (db.Unit_Users.user_id==lg.user_id))\
+                            .select(db.Unit_Users.uuid).first()}}
+                            {{if uuid:}}
+                                {{name=db(db.User_Info.uuid==uuid.uuid).select(db.User_Info.user_name).first()}}
+                                <td>{{=lg.user_id}}</td>
+                                <td>{{=name.user_name}}</td>
+                                <td>{{=lg.access_date}}</td>
+                                <td>{{=lg.access_time}}</td>
+                            {{pass}}
+                        </tr>
+                        {{pass}}
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{{else:}}
+<h2 class="text-center">
+    No Logs
+</h2>
+{{pass}}

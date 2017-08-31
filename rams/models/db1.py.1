@@ -1,0 +1,117 @@
+# -*- coding: utf-8 -*-
+from datetime import datetime
+
+db.define_table('Clients',
+                Field('client_id', 'string'),
+                Field('name', 'string', requires=IS_NOT_EMPTY()),
+                Field('email', 'string'),
+                Field('phone', 'integer', requires=IS_NOT_EMPTY()),
+                Field('address', 'string', requires=IS_NOT_EMPTY()),
+                primarykey=['client_id'])
+
+db.Clients.email.requires = [IS_NOT_EMPTY(), IS_EMAIL()]
+
+db.define_table('Units',
+                Field('unit_id', 'string'),
+                Field('unit_name', 'string'),
+                Field('dev_type', 'string'),
+                Field('model', 'string'),
+                Field('vendor', 'string'),
+                Field('template_capacity', 'integer'),
+                Field('login_capacity', 'integer'),
+                primarykey=['unit_id'])
+db.Units.truncate()
+db.define_table('control_instruction',
+                Field('unit_id'),
+                Field('update_flag'),
+                Field('ulog_flag'),
+                Field('uinfo_flag'),
+                Field('ulog_start_time', 'datetime'),
+                Field('ulog_end_time', 'datetime'))
+
+db.control_instruction.truncate()
+
+db.define_table('User_Info',
+                Field('uuid','string'),
+                Field('unit_id', 'string'),
+                Field('user_id', 'string'),
+                Field('user_name', 'string', requires=IS_NOT_EMPTY()),
+                Field('department', 'string'),
+                Field('fp0', 'text', requires=IS_NOT_EMPTY()),
+                Field('fp0_size', 'integer'),
+                Field('fp1', 'text', requires=IS_NOT_EMPTY()),
+                Field('fp1_size'),
+                Field('face','string'),
+                Field('ratina','string'),
+                Field('password', 'string'),
+                Field('group_no'),
+                Field('card', 'string'),
+                Field('phone'),
+                Field('email'),
+                Field('fathername'),
+                Field('mothername'),
+                Field('address'),
+                Field('class_session'),
+                Field('classroll'),
+                Field('privilege', 'integer'))
+
+#db.User_Info.truncate()
+db.define_table('Client_Unit',
+                Field('client_id'),
+                Field('unit_id'))
+
+#db.Client_Unit.truncate()
+db.define_table('Unit_Users',
+                Field('unit_id', 'string'),
+                Field('user_id', 'string'),
+                Field('uuid', 'string'),
+                Field('access_type', 'string'))
+#db.Unit_Users.truncate()
+db.define_table('Client_User',
+                Field('client_id','string'),
+                Field('user_id','string'),
+                Field('uuid','string'))
+
+#db.Client_User.truncate()
+db.define_table('Client_Unit_User',
+                Field('client_id', 'string'),
+                Field('unit_id','string'),
+                Field('user_id', 'string'),
+                Field('uuid', 'string'))
+
+#db.Client_Unit_User.truncate()
+db.define_table('test',
+                Field('user_id', 'string'),
+                Field('user_name', 'string'),
+                Field('password', 'string'),
+                Field('card', 'string'))
+
+db.define_table('Access_Type',
+                Field('id', 'integer'),
+                Field('access_type', 'string'),
+                primarykey=['id'])
+
+db.define_table('Accesses',
+                Field('id', 'integer'),
+                Field('access_type', 'string'),
+                primarykey=['id'])
+
+db.define_table('temp_unit_user',
+                Field('unit_id', 'string'),
+                Field('user_id', 'string'),
+                Field('uuid', 'string'),
+                Field('access_type', 'string'))
+#db.temp_unit_user.truncate()
+db.define_table('Users_Log',
+                Field('unit_id', 'string'),
+                Field('user_id', 'string'),
+                Field('access_date', 'string'),
+                Field('access_time', 'string'),
+                Field('verified'),
+                Field('status'),
+                Field('workcode'))
+
+#db.Users_Log.truncate()
+
+db.define_table('Jsondata',
+                Field('jsondata'))

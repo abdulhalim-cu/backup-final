@@ -1,0 +1,51 @@
+{{extend 'layout.html'}}
+
+<div id="page-title">
+    <h2>{{=unit_name}}'s Access Logs [Today]</h2>
+</div>
+<div class="panel">
+<div class="panel-body">
+                <table id="index" class="table table-striped" cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        <th>User ID</th>
+                        <th>User Name</th>
+                        <th>Access Date</th>
+                        <th>Access Time</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{if logs:}}
+                        {{for lg in logs:}}
+                        <tr>
+                            {{unique_user = db((db.Unit_Users.unit_id==lg.unit_id) & (db.Unit_Users.user_id==lg.user_id)).select(db.Unit_Users.uuid)}}
+                            {{if unique_user:}}
+                                {{for uuid in unique_user:}}
+                                    {{uname=db((db.User_Info.uuid==uuid.uuid) & (db.User_Info.user_id == lg.user_id)).select(db.User_Info.user_name)}}
+                                    {{for name in uname:}}
+                                    <td>{{=lg.user_id}}</td>
+                                    <td>{{=name.user_name}}</td>
+                                    <td>{{=lg.access_date}}</td>
+                                    <td>{{=lg.access_time}}</td>
+                                    {{pass}}
+                                {{pass}}
+                            {{pass}}
+                        </tr>
+                        {{pass}}
+                    {{pass}}
+                    </tbody>
+                </table>
+        </div>
+    </div>
+<script type="text/javascript">
+    $(document).ready(function() {
+    $('#index').DataTable( {
+        paging:         true,
+        lengthMenu: [ 10, 25, 50, 75, 100 ],
+        dom: 'lfBrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+    });
+    } );
+</script>

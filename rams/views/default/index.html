@@ -1,0 +1,121 @@
+{{extend 'layout.html'}}
+{{
+from datetime import datetime
+import calendar
+import pytz
+}}
+<div class='row'>
+{{user = db(db.Client_User.client_id==cid).select(db.Client_User.user_id)}}
+<div class="col-md-4">
+    <div class="tile-box tile-box-alt mrg20B bg-user">
+        <div class="tile-header">Total Users</div>
+        <div class="tile-content-wrapper"><i class="glyph-icon fa-users"></i>
+            <div class="tile-content"> {{=len(user)}}</div><small>Total number of users</small></div><a href="{{=URL('default','usermanagement')}}" class="tile-footer tooltip-button" data-placement="bottom" title="" data-original-title="All Users">view details <i class="glyph-icon fa-chevron-right"></i></a></div>
+</div>
+{{length = 0}}
+{{for q in query:}}
+    {{dt = datetime.now(pytz.timezone('Asia/Dhaka')).date()}}
+    {{log = db((db.Users_Log.unit_id==q.unit_id) & (db.Users_Log.access_date==dt)).select(db.Users_Log.user_id)}}
+    {{length += len(log)}}
+{{pass}}
+  <div class="col-md-4">
+    <div class="tile-box tile-box-alt mrg20B bg-logged">
+        <div class="tile-header">Accessed Today</div>
+        <div class="tile-content-wrapper"><i class="glyph-icon fa-history"></i>
+            <div class="tile-content">{{=length}}</div><small>Times accessed by all users</small></div><a href="{{=URL('default','all_unit_log')}}" class="tile-footer tooltip-button" data-placement="bottom" title="" data-original-title="This is a link example!">view details <i class="glyph-icon fa-chevron-right"></i></a></div>
+</div>
+{{
+def getTimeDifferenceFromNow(TimeStart, TimeEnd):
+    timeDiff = TimeEnd - TimeStart
+    return timeDiff.total_seconds() / 60
+
+units = db(db.Client_Unit.client_id==cid).select(db.Client_Unit.unit_id)
+alive = 0
+dead = 0
+unitid=list()
+unitname=list()
+dt=list()
+t=list()
+mn=list()
+for unit in units:
+    status = db((db.Alive.client_id==cid) & (db.Alive.unit_id==unit.unit_id)).select().first()
+    if status:
+        unitid.append(unit.unit_id)
+        unitname.append(db.Units(db.Units.unit_id==unit.unit_id).unit_name)
+        date = status.last_connected.strftime("%d-%m-%Y")
+        dt.append(date)
+        d = status.last_connected.strftime("%I:%M %p")
+        t.append(d)
+        d1 = status.server_datetime
+        d2 = datetime.now()
+        min=int(getTimeDifferenceFromNow(d1,d2))
+        mn.append(min)
+        if min > 20:
+            dead += 1
+        else:
+            alive += 1
+        pass
+    pass
+pass
+}}
+{{if dead > 0:}}
+ <div class="col-md-4">
+    <div class="tile-box tile-box-alt mrg20B bg-red">
+        <div class="tile-header">Device Health</div>
+        <div class="tile-content-wrapper"><i class="glyph-icon fa-exclamation-triangle"></i>
+            <div class="tile-content"> {{=dead}}</div><small>Some device needs attention</small></div><a href="{{=URL('default','deviceStatus')}}" class="tile-footer tooltip-button" data-placement="bottom" title="" data-original-title="Device status">view details <i class="glyph-icon fa-chevron-right"></i></a></div>
+</div>
+{{elif alive > 0:}}
+<div class="col-md-4">
+    <div class="tile-box tile-box-alt mrg20B bg-green">
+        <div class="tile-header">Device Health</div>
+        <div class="tile-content-wrapper"><i class="glyph-icon fa-thumbs-o-up"></i>
+            <div class="tile-content"> {{=alive}}</div><small>All device are active</small></div><a href="{{=URL('default','deviceStatus')}}" class="tile-footer tooltip-button" data-placement="bottom" title="" data-original-title="Device status">view details <i class="glyph-icon fa-chevron-right"></i></a></div>
+</div>
+{{pass}}
+</div>
+
+<div id="page-title">
+    <h2>Device Status</h2>
+</div>
+<div class="panel">
+    <div class="panel-body">
+<table id="device-status" class="table table-striped" cellspacing="0" width="100%">
+    <thead>
+    <tr>
+        <th>Unit Name</th>
+        <th>Last Connected Date</th>
+        <th>Last Connected Time</th>
+        <th>Alive</th>
+    </tr>
+    </thead>
+    <tbody>
+        {{for i in range(0, len(unitid)):}}
+            <tr>
+                <td>{{=unitname[i]}}</td>
+                <td>{{=dt[i]}}</td>
+                <td>{{=t[i]}}</td>
+                {{if mn[i] > 20:}}
+                    <td>No</td>
+                {{else:}}
+                    <td>Yes</td>
+                {{pass}}
+            </tr>
+        {{pass}}
+    </tbody>
+</table>
+    </div>
+    </div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+    $('#device-status').DataTable( {
+        paging:         true,
+        lengthMenu: [ 10, 25, 50, 75, 100 ],
+        dom: 'lfBrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+    } );
+    } );
+</script>

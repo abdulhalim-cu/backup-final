@@ -1,0 +1,119 @@
+{{extend 'layout.html'}}
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<div id="page-title">
+    <h2>Grant Leaves</h2>
+</div>
+<div class="panel">
+<div class="panel-body">
+{{if client_user:}}
+        <div class="col-md-12 col-sm-12">
+            <form action="{{=URL('default','leave_granted')}}" method="post">
+                <table class="table table-bordered">
+                    <tr>
+                        <td>User</td>
+                        <td>Leave Date</td>
+                        <td>Action</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select name="user_id">
+                                {{for user in client_user:}}
+                                    {{name=db(db.User_Info.uuid==user.uuid).select(db.User_Info.user_name).first()}}
+                                    {{if name:}}
+                                        <option value="{{=user.user_id}},{{=user.uuid}}">
+                                            id: {{=user.user_id}}  Name:{{=name.user_name}}
+                                        </option>
+                                    {{else:}}
+                                        <option value="{{=user.user_id}},{{=user.uuid}}">{{=user.user_id}}  |  No Name Found</option>
+                                    {{pass}}
+                                {{pass}}
+                             </select>
+                        </td>
+                        <td>
+                            <lable id="from">From: </lable><input type="date" id="datepicker" name="startdate">
+                            <lable id="to">To: </lable><input type="date" id="datepicker1" name="enddate">
+                        </td>
+                        <td>
+                            <input class="btn btn-primary btn-sm" type="submit" name="submit" value="Add" />
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+    </div>
+
+        <div id="page-title">
+    <h2>Manage Leaves</h2>
+</div>
+<div class="panel">
+<div class="panel-body">
+        <div class="col-md-12 col-sm-12">
+            <table id="index" class="table table-striped" cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th>User Id</th>
+                    <th>User Name</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Action</th>
+                </tr>
+                <tbody>
+                {{for user in client_user:}}
+                    {{leave = db((db.Leave_Granted.client_id==user.client_id) & (db.Leave_Granted.uuid==user.uuid)).select()}}
+                    {{if leave:}}
+                        {{for lv in leave:}}
+                            <tr>
+                                <td>
+                                    {{=lv.user_id}}
+                                </td>
+                                {{name=db(db.User_Info.uuid==lv.uuid).select(db.User_Info.user_name).first()}}
+                                {{if name:}}
+                                    <td>
+                                        {{=name.user_name}}
+                                    </td>
+                                {{pass}}
+                                <td>{{=lv.start_date}}</td>
+                                <td>{{=lv.end_date}}</td>
+                                <td>
+                                    {{leave_id=db.Leave_Granted((db.Leave_Granted.client_id==user.client_id) &\
+                                    (db.Leave_Granted.uuid==user.uuid)).leave_id}}
+                                    <a class="btn btn-primary btn-sm" href="{{=URL('default', 'deleteLeave', args=[user.client_id,user.user_id,user.uuid,leave_id])}}">Delete</a>
+                                </td>
+                            </tr>
+                        {{pass}}
+                    {{pass}}
+                {{pass}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+  $( function() {
+    $( "#datepicker" ).datepicker( {
+        dateFormat : "yy-mm-dd"
+    });
+  } );
+  </script>
+<script>
+  $( function() {
+    $( "#datepicker1" ).datepicker( {
+        dateFormat : "yy-mm-dd"
+    });
+  } );
+  </script>
+<script type="text/javascript">
+    $(document).ready(function() {
+    $('#index').DataTable( {
+        paging:         true,
+        lengthMenu: [ 10, 25, 50, 75, 100 ],
+        dom: 'lfBrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+    });
+    } );
+</script>

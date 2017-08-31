@@ -1,0 +1,60 @@
+{{extend 'layout.html'}}
+
+{{
+from datetime import datetime
+import calendar
+import pytz
+}}
+<div id="page-title">
+    <h2>Today's Log</h2>
+</div>
+<div class="panel">
+    <div class="panel-body">
+<table id="device-status" class="table table-striped" cellspacing="0" width="100%">
+<thead>
+    <tr>
+        <th>Unit Name</th>
+        <th>User ID</th>
+        <th>User Name</th>
+        <th>Access Date</th>
+        <th>Access Time</th>
+    </tr>
+    
+</thead>
+    <tbody>
+    {{for q in query:}}
+        {{dt = datetime.now(pytz.timezone('Asia/Dhaka')).date()}}
+        {{log = db((db.Users_Log.unit_id==q.unit_id) & (db.Users_Log.access_date==dt)).select()}}
+        {{if len(log) > 0:}}
+            {{for lg in log:}}
+                {{uuid = db((db.Unit_Users.unit_id==lg.unit_id) & (db.Unit_Users.user_id==lg.user_id)).select(db.Unit_Users.uuid).first()}}
+                {{if uuid:}}
+                    {{name=db(db.User_Info.uuid==uuid.uuid).select(db.User_Info.user_name).first()}}
+                    <tr>
+                        <td>{{=db.Units(db.Units.unit_id==lg.unit_id).unit_name}}</td>
+                        <td>{{=lg.user_id}}</td>
+                        <td>{{=name.user_name}}</td>
+                        <td>{{=lg.access_date}}</td>
+                        <td>{{=lg.access_time}}</td>
+                     </tr>
+                {{pass}}
+            {{pass}}
+        {{pass}}
+    {{pass}}
+        </tbody>
+</table>
+
+
+
+<script type="text/javascript">
+    $(document).ready(function() {
+    $('#device-status').DataTable( {
+        paging:         true,
+        lengthMenu: [ 10, 25, 50, 75, 100 ],
+        dom: 'lfBrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+    } );
+    } );
+</script>
